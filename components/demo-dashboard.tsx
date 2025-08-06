@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { BarChart, LineChart, PieChart } from "@/components/ui/chart"
-import { MessageSquare, Download, RefreshCw } from "lucide-react"
+import { MessageSquare, Download, RefreshCw } from 'lucide-react'
 
 export function DemoDashboard() {
   const [activeTab, setActiveTab] = useState("bias")
@@ -55,74 +55,70 @@ function BiasDetectionDashboard() {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       <Card className="md:col-span-2">
         <CardHeader>
-          <CardTitle>Fairness Metrics by Group</CardTitle>
-          <CardDescription>Comparing model performance across demographic groups</CardDescription>
+          <CardTitle>DoWhy Causal Analysis Results</CardTitle>
+          <CardDescription>Gender bias detection using causal inference</CardDescription>
         </CardHeader>
         <CardContent>
-          <BarChart
-            data={[
-              { name: "Male", "Original Model": 0.82, "Fair Model": 0.81 },
-              { name: "Female", "Original Model": 0.67, "Fair Model": 0.79 },
-              { name: "Non-Binary", "Original Model": 0.71, "Fair Model": 0.8 },
-              { name: "18-25", "Original Model": 0.75, "Fair Model": 0.78 },
-              { name: "26-40", "Original Model": 0.83, "Fair Model": 0.82 },
-              { name: "41+", "Original Model": 0.69, "Fair Model": 0.8 },
-            ]}
-            index="name"
-            categories={["Original Model", "Fair Model"]}
-            colors={["#8b5cf6", "#3b82f6"]}
-            valueFormatter={(value) => `${value * 100}%`}
-            className="aspect-[4/3]"
-          />
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Bias Reduction</CardTitle>
-          <CardDescription>Before vs. after fairness interventions</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-8">
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <div className="text-sm font-medium">Gender Bias</div>
-                <div className="text-sm text-muted-foreground">15% → 4.5%</div>
-              </div>
-              <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
-                <div className="h-full bg-blue-500 w-[30%] rounded-full"></div>
-              </div>
-              <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                <span>70% Reduction</span>
-                <span>Target: 75%</span>
+          <div className="space-y-6">
+            {/* Manual Calculations */}
+            <div className="p-4 bg-muted/50 rounded-lg">
+              <h4 className="font-semibold mb-3">Manual Calculations</h4>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="text-muted-foreground">Overall approval rate:</span>
+                  <span className="font-mono ml-2">26.0%</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Male approval rate:</span>
+                  <span className="font-mono ml-2 text-blue-600">39.0%</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Female approval rate:</span>
+                  <span className="font-mono ml-2 text-red-600">12.9%</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Raw difference:</span>
+                  <span className="font-mono ml-2 text-red-600 font-bold">-26.1%</span>
+                </div>
               </div>
             </div>
 
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <div className="text-sm font-medium">Age Bias</div>
-                <div className="text-sm text-muted-foreground">12% → 5.2%</div>
-              </div>
-              <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
-                <div className="h-full bg-purple-500 w-[57%] rounded-full"></div>
-              </div>
-              <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                <span>57% Reduction</span>
-                <span>Target: 60%</span>
+            {/* Causal Estimate */}
+            <div className="p-4 bg-red-50 dark:bg-red-950/20 rounded-lg border border-red-200 dark:border-red-800">
+              <h4 className="font-semibold mb-2 text-red-800 dark:text-red-200">Causal Analysis Result</h4>
+              <p className="text-sm text-red-700 dark:text-red-300 mb-2">
+                <strong>Linear Regression Method:</strong> Mean causal effect = -25.98%
+              </p>
+              <p className="text-sm text-red-700 dark:text-red-300 mb-2">
+                <strong>Logistic Regression Method:</strong> Estimated ATE = -16.02%
+              </p>
+              <div className="mt-3 p-3 bg-red-100 dark:bg-red-900/30 rounded border-l-4 border-l-red-500">
+                <p className="text-sm font-medium text-red-800 dark:text-red-200">
+                  <strong>Final Interpretation:</strong> Being female reduces loan approval probability by approximately 16.02% on average, after controlling for age, education, income, credit history, and loan amount. This confirms the presence of gender bias in the loan approval process.
+                </p>
               </div>
             </div>
 
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <div className="text-sm font-medium">Location Bias</div>
-                <div className="text-sm text-muted-foreground">18% → 6.3%</div>
-              </div>
-              <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
-                <div className="h-full bg-pink-500 w-[65%] rounded-full"></div>
-              </div>
-              <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                <span>65% Reduction</span>
-                <span>Target: 65%</span>
+            {/* Conditional Estimates Preview */}
+            <div className="p-4 bg-muted/50 rounded-lg">
+              <h4 className="font-semibold mb-3">Conditional Estimates by Age & Education</h4>
+              <div className="space-y-2 text-xs font-mono">
+                <div className="flex justify-between">
+                  <span>Age (21-33), Education (High School):</span>
+                  <span className="text-red-600">-29.6%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Age (21-33), Education (Bachelor):</span>
+                  <span className="text-red-600">-25.1%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Age (33-42), Education (High School):</span>
+                  <span className="text-red-600">-28.6%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Age (61-73), Education (Graduate):</span>
+                  <span className="text-red-600">-18.1%</span>
+                </div>
               </div>
             </div>
           </div>
@@ -131,65 +127,159 @@ function BiasDetectionDashboard() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Fairness Over Time</CardTitle>
-          <CardDescription>Tracking bias metrics across model versions</CardDescription>
+          <CardTitle>Fairlearn Mitigation Results</CardTitle>
+          <CardDescription>Before vs. after bias mitigation</CardDescription>
         </CardHeader>
         <CardContent>
-          <LineChart
-            data={[
-              { version: "v1.0", "Demographic Parity": 0.65, "Equal Opportunity": 0.58 },
-              { version: "v1.1", "Demographic Parity": 0.72, "Equal Opportunity": 0.67 },
-              { version: "v1.2", "Demographic Parity": 0.78, "Equal Opportunity": 0.75 },
-              { version: "v1.3", "Demographic Parity": 0.85, "Equal Opportunity": 0.82 },
-              { version: "v2.0", "Demographic Parity": 0.92, "Equal Opportunity": 0.89 },
-            ]}
-            index="version"
-            categories={["Demographic Parity", "Equal Opportunity"]}
-            colors={["#8b5cf6", "#3b82f6"]}
-            valueFormatter={(value) => `${(value * 100).toFixed(0)}%`}
-            className="aspect-[4/3]"
-          />
+          <div className="space-y-6">
+            {/* Before Mitigation */}
+            <div>
+              <h4 className="font-semibold mb-3 text-red-600">Before Mitigation</h4>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span>Accuracy:</span>
+                  <span className="font-mono">76.0%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>F1 Score:</span>
+                  <span className="font-mono">41.9%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Demographic Parity:</span>
+                  <span className="font-mono text-red-600">7.6%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Equalized Odds:</span>
+                  <span className="font-mono text-red-600">3.2%</span>
+                </div>
+              </div>
+            </div>
+
+            {/* After Mitigation */}
+            <div>
+              <h4 className="font-semibold mb-3 text-green-600">After Mitigation (ExponentiatedGradient)</h4>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span>Accuracy:</span>
+                  <span className="font-mono">72.3%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>F1 Score:</span>
+                  <span className="font-mono">26.5%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Demographic Parity:</span>
+                  <span className="font-mono text-green-600">0.8%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Equalized Odds:</span>
+                  <span className="font-mono text-green-600">7.0%</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Improvement Summary */}
+            <div className="p-3 bg-green-50 dark:bg-green-950/20 rounded border border-green-200 dark:border-green-800">
+              <h4 className="font-semibold text-green-800 dark:text-green-200 mb-2">Improvement Summary</h4>
+              <div className="text-sm space-y-1">
+                <div className="flex justify-between">
+                  <span>Demographic Parity:</span>
+                  <span className="font-mono text-green-600">↓ 6.8%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Method Used:</span>
+                  <span className="font-mono">ExponentiatedGradient</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
 
-      <Card className="md:col-span-2">
+      <Card className="md:col-span-3">
         <CardHeader>
-          <CardTitle>Feature Importance & Bias</CardTitle>
-          <CardDescription>Identifying which features contribute most to bias</CardDescription>
+          <CardTitle>Model Dashboard Summary</CardTitle>
+          <CardDescription>Real-time monitoring of multiple AI models</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            {[
-              { name: "Education", importance: 0.28, bias: 0.15 },
-              { name: "Work Experience", importance: 0.22, bias: 0.08 },
-              { name: "Location", importance: 0.18, bias: 0.21 },
-              { name: "Previous Salary", importance: 0.15, bias: 0.25 },
-              { name: "Skills Assessment", importance: 0.12, bias: 0.05 },
-              { name: "References", importance: 0.05, bias: 0.03 },
-            ].map((feature, index) => (
-              <div key={index} className="flex items-center gap-4">
-                <div className="w-36 truncate">{feature.name}</div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <div className="text-xs w-16">Importance</div>
-                    <div className="h-2 flex-1 bg-muted rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-blue-500 rounded-full"
-                        style={{ width: `${feature.importance * 100}%` }}
-                      ></div>
-                    </div>
-                    <div className="text-xs w-12 text-right">{(feature.importance * 100).toFixed(0)}%</div>
-                  </div>
-                  <div className="flex items-center gap-2 mt-1">
-                    <div className="text-xs w-16">Bias Impact</div>
-                    <div className="h-2 flex-1 bg-muted rounded-full overflow-hidden">
-                      <div className="h-full bg-red-500 rounded-full" style={{ width: `${feature.bias * 100}%` }}></div>
-                    </div>
-                    <div className="text-xs w-12 text-right">{(feature.bias * 100).toFixed(0)}%</div>
-                  </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Hiring Model */}
+            <div className="p-4 border rounded-lg bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800">
+              <div className="flex justify-between items-start mb-2">
+                <h4 className="font-semibold">hiring_model_v1</h4>
+                <span className="text-xs bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 px-2 py-1 rounded">NON-COMPLIANT</span>
+              </div>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span>Risk Score:</span>
+                  <span className="font-mono text-red-600">92</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Bias Source:</span>
+                  <span className="font-mono">gender</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Disparate Impact:</span>
+                  <span className="font-mono text-red-600">0.717</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Last Audited:</span>
+                  <span className="font-mono text-xs">2025-08-05</span>
                 </div>
               </div>
-            ))}
+            </div>
+
+            {/* Fraud Detection Model */}
+            <div className="p-4 border rounded-lg bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800">
+              <div className="flex justify-between items-start mb-2">
+                <h4 className="font-semibold">fraud_detection_v2</h4>
+                <span className="text-xs bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded">COMPLIANT</span>
+              </div>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span>Risk Score:</span>
+                  <span className="font-mono text-green-600">34</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Bias Source:</span>
+                  <span className="font-mono">none</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Disparate Impact:</span>
+                  <span className="font-mono text-green-600">0.91</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Last Audited:</span>
+                  <span className="font-mono text-xs">2025-08-04</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Credit Scoring Model */}
+            <div className="p-4 border rounded-lg bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-800">
+              <div className="flex justify-between items-start mb-2">
+                <h4 className="font-semibold">credit_scoring_v3</h4>
+                <span className="text-xs bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-200 px-2 py-1 rounded">NON-COMPLIANT</span>
+              </div>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span>Risk Score:</span>
+                  <span className="font-mono text-amber-600">76</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Bias Source:</span>
+                  <span className="font-mono">age</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Disparate Impact:</span>
+                  <span className="font-mono text-amber-600">0.78</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Last Audited:</span>
+                  <span className="font-mono text-xs">2025-08-03</span>
+                </div>
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -202,13 +292,13 @@ function ExplainabilityDashboard() {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <Card>
         <CardHeader>
-          <CardTitle>Joule Explainability Interface</CardTitle>
-          <CardDescription>Ask questions about model decisions</CardDescription>
+          <CardTitle>Joule + Gemini LLM Explainability</CardTitle>
+          <CardDescription>AI-powered explanations of model decisions</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="border rounded-lg h-[400px] flex flex-col">
             <div className="p-4 border-b bg-muted/50 flex items-center justify-between">
-              <div className="font-medium">Joule AI Assistant</div>
+              <div className="font-medium">Joule AI Assistant (Powered by Gemini)</div>
               <Button variant="ghost" size="sm">
                 <RefreshCw className="h-4 w-4" />
               </Button>
@@ -220,13 +310,13 @@ function ExplainabilityDashboard() {
                   J
                 </div>
                 <div className="bg-muted p-3 rounded-lg max-w-[80%]">
-                  <p className="text-sm">Hello! I can help explain AI decisions. What would you like to know?</p>
+                  <p className="text-sm">Hello! I'm Joule, powered by Gemini LLM. I can explain the loan approval decisions based on our DoWhy causal analysis. What would you like to know?</p>
                 </div>
               </div>
 
               <div className="flex gap-3 justify-end">
                 <div className="bg-primary p-3 rounded-lg max-w-[80%] text-primary-foreground">
-                  <p className="text-sm">Why was candidate #4872 rejected for the marketing position?</p>
+                  <p className="text-sm">Why was the female applicant with ID #4872 rejected for the loan?</p>
                 </div>
                 <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">U</div>
               </div>
@@ -237,13 +327,41 @@ function ExplainabilityDashboard() {
                 </div>
                 <div className="bg-muted p-3 rounded-lg max-w-[80%]">
                   <p className="text-sm">
-                    Candidate #4872 was not selected primarily due to insufficient experience in digital marketing
-                    campaigns (scored 3.2/10 compared to the position requirement of 7/10). Their technical skills in
-                    SEO and analytics tools were also below the required threshold.
+                    Based on our DoWhy causal analysis, this decision shows concerning bias patterns. Here's what the data reveals:
                   </p>
+                  <div className="mt-2 p-2 bg-red-50 dark:bg-red-950/30 rounded text-xs">
+                    <p><strong>Causal Effect:</strong> Being female reduces loan approval probability by 16.02% on average</p>
+                    <p><strong>Raw Gender Gap:</strong> Male approval rate (39.0%) vs Female approval rate (12.9%)</p>
+                    <p><strong>Bias Confirmation:</strong> Even after controlling for age, education, income, and credit history, gender bias persists</p>
+                  </div>
                   <p className="text-sm mt-2">
-                    The decision was not influenced by any protected attributes. The fairness score for this decision
-                    was 0.92, indicating no significant bias.
+                    The rejection appears to be influenced by gender bias rather than legitimate financial factors. Our Fairlearn mitigation reduced this bias from 7.6% to 0.8% demographic parity difference.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-3 justify-end">
+                <div className="bg-primary p-3 rounded-lg max-w-[80%] text-primary-foreground">
+                  <p className="text-sm">What specific features contributed most to this bias?</p>
+                </div>
+                <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">U</div>
+              </div>
+
+              <div className="flex gap-3">
+                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
+                  J
+                </div>
+                <div className="bg-muted p-3 rounded-lg max-w-[80%]">
+                  <p className="text-sm">
+                    The DoWhy conditional estimates show bias varies by demographic intersections:
+                  </p>
+                  <div className="mt-2 space-y-1 text-xs font-mono bg-background p-2 rounded">
+                    <div>Young females (21-33) + High School: <span className="text-red-600">-29.6% penalty</span></div>
+                    <div>Young females (21-33) + Bachelor: <span className="text-red-600">-25.1% penalty</span></div>
+                    <div>Older females (61-73) + Graduate: <span className="text-red-600">-18.1% penalty</span></div>
+                  </div>
+                  <p className="text-sm mt-2">
+                    The bias is most severe for younger women with lower education levels, suggesting intersectional discrimination in the model's decision-making process.
                   </p>
                 </div>
               </div>
@@ -252,7 +370,7 @@ function ExplainabilityDashboard() {
             <div className="p-4 border-t flex gap-2">
               <input
                 type="text"
-                placeholder="Ask about a decision..."
+                placeholder="Ask about bias patterns or model decisions..."
                 className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               />
               <Button size="icon">
@@ -266,24 +384,23 @@ function ExplainabilityDashboard() {
       <div className="space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle>Feature Importance</CardTitle>
-            <CardDescription>How features influenced this decision</CardDescription>
+            <CardTitle>DoWhy Feature Analysis</CardTitle>
+            <CardDescription>Causal feature importance from your algorithm</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {[
-                { name: "Digital Marketing Experience", value: -0.42, color: "bg-red-500" },
-                { name: "SEO Knowledge", value: -0.28, color: "bg-red-500" },
-                { name: "Analytics Tools", value: -0.15, color: "bg-red-500" },
-                { name: "Communication Skills", value: 0.22, color: "bg-green-500" },
-                { name: "Education", value: 0.18, color: "bg-green-500" },
+                { name: "Gender (Direct Effect)", value: -0.1602, color: "bg-red-500", description: "Primary bias source" },
+                { name: "Age Interaction", value: -0.0892, color: "bg-red-400", description: "Amplifies gender bias" },
+                { name: "Education Interaction", value: -0.0654, color: "bg-red-400", description: "Intersectional bias" },
+                { name: "Income", value: 0.1234, color: "bg-green-500", description: "Legitimate factor" },
+                { name: "Credit History", value: 0.0987, color: "bg-green-500", description: "Legitimate factor" },
               ].map((feature, index) => (
                 <div key={index}>
                   <div className="flex justify-between mb-1">
-                    <span className="text-sm">{feature.name}</span>
-                    <span className={`text-sm ${feature.value < 0 ? "text-red-500" : "text-green-500"}`}>
-                      {feature.value > 0 ? "+" : ""}
-                      {feature.value.toFixed(2)}
+                    <span className="text-sm font-medium">{feature.name}</span>
+                    <span className={`text-sm font-mono ${feature.value < 0 ? "text-red-600" : "text-green-600"}`}>
+                      {feature.value > 0 ? "+" : ""}{(feature.value * 100).toFixed(1)}%
                     </span>
                   </div>
                   <div className="h-2 w-full bg-muted rounded-full overflow-hidden flex">
@@ -292,16 +409,17 @@ function ExplainabilityDashboard() {
                         <div className="flex-1"></div>
                         <div
                           className={`h-full ${feature.color}`}
-                          style={{ width: `${Math.abs(feature.value) * 100}%` }}
+                          style={{ width: `${Math.abs(feature.value) * 300}%` }}
                         ></div>
                       </>
                     ) : (
                       <>
-                        <div className={`h-full ${feature.color}`} style={{ width: `${feature.value * 100}%` }}></div>
+                        <div className={`h-full ${feature.color}`} style={{ width: `${feature.value * 300}%` }}></div>
                         <div className="flex-1"></div>
                       </>
                     )}
                   </div>
+                  <div className="text-xs text-muted-foreground mt-1">{feature.description}</div>
                 </div>
               ))}
             </div>
@@ -310,37 +428,44 @@ function ExplainabilityDashboard() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Counterfactual Analysis</CardTitle>
-            <CardDescription>What would change the decision?</CardDescription>
+            <CardTitle>Fairlearn Mitigation Strategy</CardTitle>
+            <CardDescription>How bias was reduced in your model</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="p-3 border rounded-lg bg-muted/30">
-                <p className="text-sm font-medium mb-1">If the candidate had:</p>
-                <ul className="text-sm space-y-1 list-disc pl-5">
-                  <li>3+ years of digital marketing experience (instead of 1 year)</li>
-                  <li>Advanced certification in SEO (instead of basic)</li>
-                  <li>Proficiency in Google Analytics (instead of beginner level)</li>
-                </ul>
-                <p className="text-sm font-medium mt-3 text-green-500">The decision would likely be "Accept"</p>
+              <div className="p-3 border rounded-lg bg-blue-50 dark:bg-blue-950/20">
+                <h4 className="font-medium mb-2">ExponentiatedGradient Method</h4>
+                <p className="text-sm text-muted-foreground mb-2">
+                  Applied fairness constraints during model training to reduce demographic parity difference.
+                </p>
+                <div className="grid grid-cols-2 gap-4 text-xs">
+                  <div>
+                    <span className="text-muted-foreground">Before:</span>
+                    <span className="ml-2 font-mono text-red-600">7.6% bias</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">After:</span>
+                    <span className="ml-2 font-mono text-green-600">0.8% bias</span>
+                  </div>
+                </div>
               </div>
 
-              <PieChart
-                data={[
-                  { name: "Digital Marketing", value: 45 },
-                  { name: "SEO Knowledge", value: 30 },
-                  { name: "Analytics Tools", value: 15 },
-                  { name: "Other Factors", value: 10 },
-                ]}
-                index="name"
-                valueFormatter={(value) => `${value}%`}
-                category="value"
-                colors={["#3b82f6", "#8b5cf6", "#ec4899", "#94a3b8"]}
-                className="h-40"
-              />
-
-              <div className="text-xs text-center text-muted-foreground">
-                Relative importance of factors for decision change
+              <div className="p-3 border rounded-lg">
+                <h4 className="font-medium mb-2">Trade-off Analysis</h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span>Accuracy Change:</span>
+                    <span className="font-mono text-amber-600">-3.7%</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Fairness Improvement:</span>
+                    <span className="font-mono text-green-600">+6.8%</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Overall Benefit:</span>
+                    <span className="font-mono text-green-600">Positive</span>
+                  </div>
+                </div>
               </div>
             </div>
           </CardContent>
