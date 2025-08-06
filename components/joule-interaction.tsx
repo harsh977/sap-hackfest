@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { SendHorizontal, Bot, User, BarChart2, AlertCircle, Info } from 'lucide-react'
+import { SendHorizontal, Bot, User, BarChart2, AlertCircle, Info } from "lucide-react"
 
 type Message = {
   role: "user" | "assistant"
@@ -24,10 +24,10 @@ export function JouleInteraction() {
   ])
 
   const predefinedQuestions = [
-    "Explain the DoWhy causal analysis results",
-    "How did Fairlearn reduce the bias?",
-    "What features contribute most to bias?",
-    "Show me the demographic parity improvements",
+    "Why was this candidate rejected?",
+    "Is there gender bias in the model?",
+    "How can we improve fairness?",
+    "What features influenced this decision?",
   ]
 
   const handleSend = (message: string = input) => {
@@ -43,28 +43,25 @@ export function JouleInteraction() {
     setMessages((prev) => [...prev, userMessage])
     setInput("")
 
-    // Simulate Joule's response based on the question using real algorithm outputs
+    // Simulate Joule's response based on the question
     setTimeout(() => {
       let response = ""
 
-      if (message.toLowerCase().includes("rejected") || message.toLowerCase().includes("candidate")) {
+      if (message.toLowerCase().includes("rejected")) {
         response =
-          "Based on our DoWhy causal analysis of the loan approval dataset, I can explain this decision. Our analysis shows that being female reduces loan approval probability by approximately 16.02% on average, even after controlling for legitimate factors like age, education, income, and credit history.\n\nThe raw data shows:\n• Male approval rate: 39.0%\n• Female approval rate: 12.9%\n• Raw difference: -26.1%\n\nThis confirms systematic gender bias in the decision-making process. Our Fairlearn mitigation using ExponentiatedGradient reduced the demographic parity difference from 7.6% to 0.8%."
-      } else if (message.toLowerCase().includes("gender bias") || message.toLowerCase().includes("bias")) {
+          "Based on the model analysis, the candidate was rejected primarily due to insufficient experience in the required domain (scored 3.2/10 compared to the position requirement of 7/10). However, our fairness metrics indicate a potential gender bias in how experience is evaluated, with a 0.82 disparity score between male and female candidates with similar backgrounds."
+      } else if (message.toLowerCase().includes("gender bias")) {
         response =
-          "Yes, our DoWhy causal analysis detected significant gender bias. Here are the key findings:\n\n**Causal Effects:**\n• Linear Regression Method: -25.98% effect\n• Logistic Regression Method: -16.02% effect\n\n**Conditional Analysis:**\nThe bias varies by demographic intersections:\n• Young females (21-33) + High School: -29.6% penalty\n• Young females (21-33) + Bachelor: -25.1% penalty\n• Older females (61-73) + Graduate: -18.1% penalty\n\nThe bias is most severe for younger women with lower education levels, indicating intersectional discrimination."
-      } else if (message.toLowerCase().includes("improve fairness") || message.toLowerCase().includes("mitigation")) {
+          "Yes, our analysis detected gender bias in the model with a disparate impact ratio of 0.76, below the recommended 0.8 threshold. Female candidates are 24% less likely to receive positive outcomes despite similar qualifications. The bias is most pronounced in the 'years of experience' and 'leadership potential' features."
+      } else if (message.toLowerCase().includes("improve fairness")) {
         response =
-          "Our Fairlearn implementation successfully reduced bias using the ExponentiatedGradient method:\n\n**Before Mitigation:**\n• Demographic Parity Difference: 7.6%\n• Equalized Odds Difference: 3.2%\n• Accuracy: 76.0%\n\n**After Mitigation:**\n• Demographic Parity Difference: 0.8% ✓\n• Equalized Odds Difference: 7.0%\n• Accuracy: 72.3%\n\n**Trade-off Analysis:**\nWe achieved a 6.8% improvement in demographic parity with only a 3.7% accuracy reduction, representing a positive fairness-performance trade-off."
+          "To improve fairness, I recommend: 1) Retraining with balanced datasets, 2) Implementing fairness constraints during model optimization, 3) Removing or transforming the biased 'leadership potential' feature, and 4) Adding synthetic data for underrepresented groups. Our simulation shows these changes could reduce bias by up to 68%."
       } else if (message.toLowerCase().includes("features") || message.toLowerCase().includes("influenced")) {
         response =
-          "Based on our DoWhy causal feature analysis, here are the key factors influencing decisions:\n\n**Bias-Contributing Features:**\n• Gender (Direct Effect): -16.02% impact\n• Age Interaction with Gender: -8.92% impact\n• Education Interaction with Gender: -6.54% impact\n\n**Legitimate Features:**\n• Income: +12.34% positive impact\n• Credit History: +9.87% positive impact\n• Loan Amount: +5.43% impact\n\nThe analysis shows that gender and its interactions with age/education are the primary sources of unfair bias, while financial factors like income and credit history have legitimate predictive value."
-      } else if (message.toLowerCase().includes("algorithm") || message.toLowerCase().includes("method")) {
-        response =
-          "Our ethical AI auditor uses three integrated algorithms:\n\n**1. DoWhy (Bias Detection):**\n• Causal inference to identify true bias vs. correlation\n• Controls for confounding variables\n• Provides conditional estimates across demographic groups\n\n**2. Fairlearn (Bias Mitigation):**\n• ExponentiatedGradient method for fairness constraints\n• Reduces demographic parity from 7.6% to 0.8%\n• Balances fairness-accuracy trade-offs\n\n**3. Joule + Gemini LLM (Explainability):**\n• Natural language explanations of bias patterns\n• Contextual interpretation of statistical results\n• Regulatory-compliant documentation generation"
+          "The top 5 features influencing this decision were: 1) Years of experience (32% influence), 2) Technical skills assessment (24%), 3) Leadership potential (18%), 4) Education level (15%), and 5) Previous role similarity (11%). Features 1 and 3 showed significant demographic disparities in their impact."
       } else {
         response =
-          "I'm analyzing model decisions using our integrated DoWhy + Fairlearn + Gemini pipeline. I can explain:\n\n• **Bias Detection**: How DoWhy identified 16.02% gender penalty\n• **Mitigation Results**: How Fairlearn reduced bias by 6.8%\n• **Feature Analysis**: Which factors drive unfair vs. legitimate decisions\n• **Compliance**: How our results meet GDPR/EEOC requirements\n\nWhat specific aspect would you like me to explain in detail?"
+          "I'm analyzing the model's decision-making process and fairness metrics. Could you clarify what specific aspect of the model or decision you'd like me to explain? I can provide insights on bias detection, feature importance, or recommended improvements."
       }
 
       const assistantMessage: Message = {

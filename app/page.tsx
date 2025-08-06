@@ -1,6 +1,6 @@
 import type React from "react"
 import Link from "next/link"
-import { ArrowRight, Github, Linkedin } from 'lucide-react'
+import { ArrowRight, Github, Linkedin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -11,15 +11,11 @@ import { Timeline } from "@/components/timeline"
 import { DemoDashboard } from "@/components/demo-dashboard"
 import { HeroBackground } from "@/components/hero-background"
 import { ContactForm } from "@/components/contact-form"
+// Add the import for BiasAuditingPipelines at the top with other imports
 import { BiasAuditingPipelines } from "@/components/bias-auditing-pipelines"
+// First, add the import at the top
 import { Navigation } from "@/components/navigation"
 import { InnovationCard } from "@/components/innovation-card"
-import { PersonasSection } from "@/components/personas-section"
-import { UserNeedsAnalysis } from "@/components/user-needs-analysis"
-import { ProblemStatement } from "@/components/problem-statement"
-import { ResearchEvidence } from "@/components/research-evidence"
-import { BusinessImpact } from "@/components/business-impact"
-import { SolutionAlignment } from "@/components/solution-alignment"
 
 export default function Home() {
   return (
@@ -37,7 +33,7 @@ export default function Home() {
               Ethical AI Auditor for Business Applications
             </h1>
             <p className="max-w-[700px] text-muted-foreground md:text-xl mb-8">
-              Scalable, Transparent, and Fair AI for Modern Enterprises
+              Ensuring fairness, transparency, and compliance in enterprise AI.
             </p>
             <Button size="lg" className="rounded-full">
               Explore the Dashboard <ArrowRight className="ml-2 h-4 w-4" />
@@ -45,29 +41,21 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Problem Statement */}
-        <ProblemStatement />
-
-        {/* Personas Section */}
-        <PersonasSection />
-
-        {/* User Needs Analysis */}
-        <UserNeedsAnalysis />
-
-        {/* Research & Evidence */}
-        <ResearchEvidence />
-
         {/* Problem & Vision */}
         <section id="problem" className="py-20 bg-muted/50">
           <div className="container">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               <div>
-                <h2 className="text-3xl font-bold tracking-tighter mb-6">Our Vision</h2>
+                <h2 className="text-3xl font-bold tracking-tighter mb-6">Problem & Vision</h2>
                 <div className="space-y-4">
                   <p className="text-muted-foreground">
-                    We envision a future where AI systems are inherently fair, transparent, and compliant by design.
-                    Our solution transforms the challenge of AI ethics from a reactive compliance burden into a
-                    proactive strategic advantage.
+                    Unchecked AI in hiring, lending, and customer service leads to discrimination, opacity, and legal
+                    risks. Organizations face increasing scrutiny over algorithmic decision-making, yet lack the tools
+                    to ensure fairness.
+                  </p>
+                  <p className="text-muted-foreground">
+                    Without proper auditing, AI systems can perpetuate historical biases, create unexplainable
+                    decisions, and expose businesses to regulatory penalties.
                   </p>
                   <div className="mt-6 p-4 border rounded-lg bg-background">
                     <p className="font-medium text-lg">
@@ -83,34 +71,34 @@ export default function Home() {
                   <div className="grid grid-cols-2 gap-4 p-6 w-full max-w-md">
                     <Card className="bg-background/80 backdrop-blur-sm">
                       <CardHeader className="p-4">
-                        <CardTitle className="text-lg">Fairness</CardTitle>
+                        <CardTitle className="text-lg">Discrimination</CardTitle>
                       </CardHeader>
                       <CardContent className="p-4 pt-0">
-                        <p className="text-sm">Automated bias detection and mitigation</p>
+                        <p className="text-sm">AI systems can perpetuate historical biases</p>
                       </CardContent>
                     </Card>
                     <Card className="bg-background/80 backdrop-blur-sm">
                       <CardHeader className="p-4">
-                        <CardTitle className="text-lg">Transparency</CardTitle>
+                        <CardTitle className="text-lg">Opacity</CardTitle>
                       </CardHeader>
                       <CardContent className="p-4 pt-0">
-                        <p className="text-sm">Explainable AI with clear insights</p>
+                        <p className="text-sm">Black-box decisions without explanations</p>
                       </CardContent>
                     </Card>
                     <Card className="bg-background/80 backdrop-blur-sm">
                       <CardHeader className="p-4">
-                        <CardTitle className="text-lg">Compliance</CardTitle>
+                        <CardTitle className="text-lg">Legal Risk</CardTitle>
                       </CardHeader>
                       <CardContent className="p-4 pt-0">
-                        <p className="text-sm">Automated regulatory reporting</p>
+                        <p className="text-sm">Non-compliance with regulations</p>
                       </CardContent>
                     </Card>
                     <Card className="bg-background/80 backdrop-blur-sm">
                       <CardHeader className="p-4">
-                        <CardTitle className="text-lg">Scale</CardTitle>
+                        <CardTitle className="text-lg">Trust</CardTitle>
                       </CardHeader>
                       <CardContent className="p-4 pt-0">
-                        <p className="text-sm">Enterprise-ready SAP integration</p>
+                        <p className="text-sm">Eroding stakeholder confidence</p>
                       </CardContent>
                     </Card>
                   </div>
@@ -157,9 +145,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Solution Alignment */}
-        <SolutionAlignment />
-
         {/* SAP Tech Stack */}
         <section id="tech" className="py-20 bg-muted/50">
           <div className="container">
@@ -172,7 +157,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Bias Auditing Pipelines */}
+        {/* Bias Auditing Pipelines - NEW SECTION */}
         <BiasAuditingPipelines />
 
         {/* Architecture Diagram */}
@@ -216,9 +201,6 @@ export default function Home() {
             <DemoDashboard />
           </div>
         </section>
-
-        {/* Business Impact */}
-        <BusinessImpact />
 
         {/* How We Proceed */}
         <section id="approach" className="py-20">
@@ -350,30 +332,30 @@ export default function Home() {
           <div className="container">
             <h2 className="text-3xl font-bold tracking-tighter mb-2">Meet the Team</h2>
             <p className="text-muted-foreground mb-12 max-w-[800px]">
-              Team CodeHers brings together expertise in AI ethics, SAP development, and UX design
+              Our diverse team brings together expertise in AI ethics, SAP development, and UX design
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
               <TeamMember
-                name="Ayush Bharadwaj"
+                name="Alex Chen"
                 role="ML Lead"
                 goal="Implement fairness-aware algorithms"
                 image="/placeholder.svg?height=300&width=300"
               />
               <TeamMember
-                name="Harsh Daftari"
+                name="Priya Sharma"
                 role="SAP Developer"
                 goal="Integrate with SAP AI Core"
                 image="/placeholder.svg?height=300&width=300"
               />
               <TeamMember
-                name="Nikhil Singh"
+                name="Marcus Johnson"
                 role="UX Designer"
                 goal="Create intuitive ethical AI interfaces"
                 image="/placeholder.svg?height=300&width=300"
               />
               <TeamMember
-                name="Yash Singh"
+                name="Sofia Rodriguez"
                 role="Ethics Specialist"
                 goal="Ensure compliance with regulations"
                 image="/placeholder.svg?height=300&width=300"
