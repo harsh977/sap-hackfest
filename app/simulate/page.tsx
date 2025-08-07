@@ -41,7 +41,7 @@ export default function SimulatePage() {
               </p>
               <div className="flex gap-4">
                 <Button asChild size="lg">
-                  <Link href="/">Return to Main Tool</Link>
+                  <Link href="/#demo">Return to Main Dashboard</Link>
                 </Button>
                 <Button variant="outline" asChild size="lg">
                   <Link href="#upload">

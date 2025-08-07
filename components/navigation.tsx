@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Menu, X } from "lucide-react"
+import { Menu, X } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
 
@@ -26,10 +26,10 @@ export function Navigation() {
       }`}
     >
       <div className="container flex h-16 items-center justify-between">
-        <div className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600"></div>
           <span className="font-bold tracking-tight">Ethical AI Auditor</span>
-        </div>
+        </Link>
         <nav className="hidden md:flex items-center gap-6">
           <Link href="#problem" className="text-sm font-medium hover:text-primary">
             Problem & Vision
@@ -58,11 +58,19 @@ export function Navigation() {
           <Link href="/simulate" className="text-sm font-medium hover:text-primary">
             Simulate
           </Link>
+          <a 
+            href="https://sap-final-frontend.vercel.app" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-sm font-medium hover:text-primary"
+          >
+            Explainability
+          </a>
         </nav>
         <div className="flex items-center gap-2">
           <ModeToggle />
           <Button variant="default" size="sm" className="hidden md:flex">
-            <Link href="#demo">Explore Dashboard</Link>
+            <Link href="/#demo">Explore Dashboard</Link>
           </Button>
           <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsOpen(true)}>
             <Menu className="h-5 w-5" />
@@ -76,10 +84,10 @@ export function Navigation() {
         <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm md:hidden">
           <div className="fixed inset-y-0 right-0 w-full max-w-xs bg-background p-6 shadow-lg">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
+              <Link href="/" className="flex items-center gap-2">
                 <div className="h-8 w-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600"></div>
                 <span className="font-bold tracking-tight">Ethical AI Auditor</span>
-              </div>
+              </Link>
               <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
                 <X className="h-5 w-5" />
                 <span className="sr-only">Close menu</span>
@@ -149,8 +157,17 @@ export function Navigation() {
               >
                 Simulate
               </Link>
+              <a
+                href="https://sap-final-frontend.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center py-2 text-base font-medium hover:text-primary"
+                onClick={() => setIsOpen(false)}
+              >
+                Explainability
+              </a>
               <Button className="mt-4" onClick={() => setIsOpen(false)}>
-                <Link href="#demo">Explore Dashboard</Link>
+                <Link href="/#demo">Explore Dashboard</Link>
               </Button>
             </nav>
           </div>

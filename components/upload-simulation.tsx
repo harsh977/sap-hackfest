@@ -6,10 +6,11 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import { FileUp, AlertCircle, CheckCircle2, BarChart2, FileText, Shield, Download } from 'lucide-react'
+import { FileUp, AlertCircle, CheckCircle2, BarChart2, FileText, Shield, Download, ArrowLeft } from 'lucide-react'
 import { ComplianceReport } from "@/components/compliance-report"
 import { DoWhyAnalysis } from "@/components/dowhy-analysis"
 import { useDataset } from "@/components/dataset-context"
+import Link from "next/link"
 
 export function UploadSimulation() {
   const { datasetType, setDatasetType } = useDataset()
@@ -198,9 +199,14 @@ export function UploadSimulation() {
               Comprehensive regulatory compliance assessment
             </p>
           </div>
-          <Button variant="outline" onClick={() => setShowReport(false)}>
-            Back to Results
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" asChild>
+              <Link href="/#demo">Return to Dashboard</Link>
+            </Button>
+            <Button variant="outline" onClick={() => setShowReport(false)}>
+              Back to Results
+            </Button>
+          </div>
         </div>
         <ComplianceReport onDownload={handleDownloadReport} datasetType={datasetType} />
       </div>
@@ -218,6 +224,9 @@ export function UploadSimulation() {
             </p>
           </div>
           <div className="flex gap-2">
+            <Button variant="outline" asChild>
+              <Link href="/#demo">Return to Dashboard</Link>
+            </Button>
             <Button variant="outline" onClick={() => setShowReport(true)}>
               View Compliance Report
             </Button>
