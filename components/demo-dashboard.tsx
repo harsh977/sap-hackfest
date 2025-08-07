@@ -57,74 +57,141 @@ function BiasDetectionDashboard() {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <Card className="lg:col-span-2">
         <CardHeader>
-          <CardTitle>Fairness Metrics by Group</CardTitle>
-          <CardDescription>Comparing model performance across demographic groups</CardDescription>
+          <CardTitle>DoWhy Causal Analysis Results</CardTitle>
+          <CardDescription>Gender bias detection using causal inference</CardDescription>
         </CardHeader>
         <CardContent className="overflow-hidden">
-          <BarChart
-            data={[
-              { name: "Male", "Original Model": 0.82, "Fair Model": 0.81 },
-              { name: "Female", "Original Model": 0.67, "Fair Model": 0.79 },
-              { name: "Non-Binary", "Original Model": 0.71, "Fair Model": 0.8 },
-              { name: "18-25", "Original Model": 0.75, "Fair Model": 0.78 },
-              { name: "26-40", "Original Model": 0.83, "Fair Model": 0.82 },
-              { name: "41+", "Original Model": 0.69, "Fair Model": 0.8 },
-            ]}
-            index="name"
-            categories={["Original Model", "Fair Model"]}
-            colors={["#8b5cf6", "#3b82f6"]}
-            valueFormatter={(value) => `${(value * 100).toFixed(0)}%`}
-            className="h-80"
-          />
+          <div className="space-y-6">
+            {/* Manual Calculations */}
+            <div className="p-4 bg-muted/50 rounded-lg">
+              <h4 className="font-semibold mb-3">Manual Calculations</h4>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="text-muted-foreground">Overall approval rate:</span>
+                  <span className="font-mono ml-2">26.0%</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Male approval rate:</span>
+                  <span className="font-mono ml-2 text-blue-600">39.0%</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Female approval rate:</span>
+                  <span className="font-mono ml-2 text-red-600">12.9%</span>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Raw difference:</span>
+                  <span className="font-mono ml-2 text-red-600 font-bold">-26.1%</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Causal Estimate */}
+            <div className="p-4 bg-red-50 dark:bg-red-950/20 rounded-lg border border-red-200 dark:border-red-800">
+              <h4 className="font-semibold mb-2 text-red-800 dark:text-red-200">Causal Analysis Result</h4>
+              <p className="text-sm text-red-700 dark:text-red-300 mb-2">
+                <strong>Linear Regression Method:</strong> Mean causal effect = -25.98%
+              </p>
+              <p className="text-sm text-red-700 dark:text-red-300 mb-2">
+                <strong>Logistic Regression Method:</strong> Estimated ATE = -16.02%
+              </p>
+              <div className="mt-3 p-3 bg-red-100 dark:bg-red-900/30 rounded border-l-4 border-l-red-500">
+                <p className="text-sm font-medium text-red-800 dark:text-red-200">
+                  <strong>Final Interpretation:</strong> Being female reduces loan approval probability by approximately 16.02% on average, after controlling for age, education, income, credit history, and loan amount. This confirms the presence of gender bias in the loan approval process.
+                </p>
+              </div>
+            </div>
+
+            {/* Conditional Estimates Preview */}
+            <div className="p-4 bg-muted/50 rounded-lg">
+              <h4 className="font-semibold mb-3">Conditional Estimates by Age & Education</h4>
+              <div className="space-y-2 text-xs font-mono">
+                <div className="flex justify-between">
+                  <span>Age (21-33), Education (High School):</span>
+                  <span className="text-red-600">-29.6%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Age (21-33), Education (Bachelor):</span>
+                  <span className="text-red-600">-25.1%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Age (33-42), Education (High School):</span>
+                  <span className="text-red-600">-28.6%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Age (61-73), Education (Graduate):</span>
+                  <span className="text-red-600">-18.1%</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Bias Reduction</CardTitle>
-          <CardDescription>Before vs. after fairness interventions</CardDescription>
+          <CardTitle>Fairlearn Mitigation Results</CardTitle>
+          <CardDescription>Before vs. after bias mitigation</CardDescription>
         </CardHeader>
         <CardContent className="overflow-hidden">
-          <div className="space-y-8">
+          <div className="space-y-6">
+            {/* Before Mitigation */}
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <div className="text-sm font-medium">Gender Bias</div>
-                <div className="text-sm text-muted-foreground">15% → 4.5%</div>
-              </div>
-              <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
-                <div className="h-full bg-blue-500 w-[70%] rounded-full transition-all duration-300"></div>
-              </div>
-              <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                <span>70% Reduction</span>
-                <span>Target: 75%</span>
+              <h4 className="font-semibold mb-3 text-red-600">Before Mitigation</h4>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span>Accuracy:</span>
+                  <span className="font-mono">76.0%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>F1 Score:</span>
+                  <span className="font-mono">41.9%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Demographic Parity:</span>
+                  <span className="font-mono text-red-600">7.6%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Equalized Odds:</span>
+                  <span className="font-mono text-red-600">3.2%</span>
+                </div>
               </div>
             </div>
 
+            {/* After Mitigation */}
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <div className="text-sm font-medium">Age Bias</div>
-                <div className="text-sm text-muted-foreground">12% → 5.2%</div>
-              </div>
-              <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
-                <div className="h-full bg-purple-500 w-[57%] rounded-full transition-all duration-300"></div>
-              </div>
-              <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                <span>57% Reduction</span>
-                <span>Target: 60%</span>
+              <h4 className="font-semibold mb-3 text-green-600">After Mitigation (ExponentiatedGradient)</h4>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span>Accuracy:</span>
+                  <span className="font-mono">72.3%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>F1 Score:</span>
+                  <span className="font-mono">26.5%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Demographic Parity:</span>
+                  <span className="font-mono text-green-600">0.8%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Equalized Odds:</span>
+                  <span className="font-mono text-green-600">7.0%</span>
+                </div>
               </div>
             </div>
 
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <div className="text-sm font-medium">Location Bias</div>
-                <div className="text-sm text-muted-foreground">18% → 6.3%</div>
-              </div>
-              <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
-                <div className="h-full bg-pink-500 w-[65%] rounded-full transition-all duration-300"></div>
-              </div>
-              <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                <span>65% Reduction</span>
-                <span>Target: 65%</span>
+            {/* Improvement Summary */}
+            <div className="p-3 bg-green-50 dark:bg-green-950/20 rounded border border-green-200 dark:border-green-800">
+              <h4 className="font-semibold text-green-800 dark:text-green-200 mb-2">Improvement Summary</h4>
+              <div className="text-sm space-y-1">
+                <div className="flex justify-between">
+                  <span>Demographic Parity:</span>
+                  <span className="font-mono text-green-600">↓ 6.8%</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Method Used:</span>
+                  <span className="font-mono">ExponentiatedGradient</span>
+                </div>
               </div>
             </div>
           </div>

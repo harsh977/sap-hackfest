@@ -8,14 +8,18 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Progress } from "@/components/ui/progress"
 import { FileUp, AlertCircle, CheckCircle2, BarChart2, FileText, Shield, Download } from 'lucide-react'
 import { ComplianceReport } from "@/components/compliance-report"
+import { DoWhyAnalysis } from "@/components/dowhy-analysis"
+import { useDataset } from "@/components/dataset-context"
 
 export function UploadSimulation() {
+  const { datasetType, setDatasetType } = useDataset()
   const [file, setFile] = useState<File | null>(null)
   const [isUploading, setIsUploading] = useState(false)
   const [currentStage, setCurrentStage] = useState(0)
   const [progress, setProgress] = useState(0)
   const [isComplete, setIsComplete] = useState(false)
   const [showReport, setShowReport] = useState(false)
+  const [showAnalysis, setShowAnalysis] = useState(false)
   const [stageDetails, setStageDetails] = useState<string[]>([])
 
   const stages = [
@@ -89,7 +93,15 @@ export function UploadSimulation() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0])
+      const selectedFile = e.target.files[0]
+      setFile(selectedFile)
+      
+      // Detect dataset type based on filename
+      if (selectedFile.name.toLowerCase().includes('unbiased')) {
+        setDatasetType('unbiased')
+      } else {
+        setDatasetType('biased')
+      }
     }
   }
 
@@ -100,11 +112,32 @@ export function UploadSimulation() {
     setIsComplete(false)
     setStageDetails([])
 
-    const totalDuration = stages.reduce((sum, stage) => sum + stage.duration, 0)
+    // Update stage details based on dataset type
+    const updatedStages = [...stages]
+    if (datasetType === 'unbiased') {
+      updatedStages[1].details = [
+        "Identifying causal estimands...",
+        "Building causal graph: gender → loan_status...",
+        "Running backdoor adjustment method...",
+        "Linear regression causal estimate: +0.66%",
+        "Detecting intersectional bias patterns...",
+        "✓ Minimal overall bias, subgroup analysis needed"
+      ]
+      updatedStages[2].details = [
+        "Analyzing baseline fairness metrics...",
+        "Overall demographic parity: 1.3%",
+        "Detecting subgroup disparities...",
+        "Young, low-education females: -9.6% bias",
+        "Older, high-education females: +34.3% advantage",
+        "⚠️ Hidden intersectional bias detected!"
+      ]
+    }
+
+    const totalDuration = updatedStages.reduce((sum, stage) => sum + stage.duration, 0)
     let elapsedTime = 0
 
     // Progress through stages with realistic timing
-    stages.forEach((stage, stageIndex) => {
+    updatedStages.forEach((stage, stageIndex) => {
       setTimeout(() => {
         setCurrentStage(stageIndex)
         setStageDetails([])
@@ -127,7 +160,7 @@ export function UploadSimulation() {
         // Clear interval when stage completes
         setTimeout(() => {
           clearInterval(stageProgressInterval)
-          if (stageIndex === stages.length - 1) {
+          if (stageIndex === updatedStages.length - 1) {
             setIsComplete(true)
             setProgress(100)
           }
@@ -146,12 +179,13 @@ export function UploadSimulation() {
     setProgress(0)
     setIsComplete(false)
     setShowReport(false)
+    setShowAnalysis(false)
     setStageDetails([])
+    setDatasetType('biased')
   }
 
   const handleDownloadReport = () => {
     // This will be handled by the ComplianceReport component's generatePDF function
-    // The button click will trigger the PDF generation directly
   }
 
   if (showReport) {
@@ -159,16 +193,40 @@ export function UploadSimulation() {
       <div id="upload" className="max-w-4xl mx-auto">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-bold tracking-tighter mb-2">Audit Results</h2>
+            <h2 className="text-3xl font-bold tracking-tighter mb-2">Compliance Report</h2>
             <p className="text-muted-foreground">
-              Comprehensive bias analysis and compliance assessment completed
+              Comprehensive regulatory compliance assessment
             </p>
           </div>
           <Button variant="outline" onClick={() => setShowReport(false)}>
-            Back to Upload
+            Back to Results
           </Button>
         </div>
-        <ComplianceReport onDownload={handleDownloadReport} />
+        <ComplianceReport onDownload={handleDownloadReport} datasetType={datasetType} />
+      </div>
+    )
+  }
+
+  if (showAnalysis) {
+    return (
+      <div id="upload" className="max-w-4xl mx-auto">
+        <div className="mb-6 flex items-center justify-between">
+          <div>
+            <h2 className="text-3xl font-bold tracking-tighter mb-2">DoWhy Analysis Results</h2>
+            <p className="text-muted-foreground">
+              Detailed causal analysis and bias detection for {datasetType === 'biased' ? 'biased' : 'unbiased'} dataset
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={() => setShowReport(true)}>
+              View Compliance Report
+            </Button>
+            <Button variant="outline" onClick={() => setShowAnalysis(false)}>
+              Back to Upload
+            </Button>
+          </div>
+        </div>
+        <DoWhyAnalysis datasetType={datasetType} />
       </div>
     )
   }
@@ -204,6 +262,9 @@ export function UploadSimulation() {
                   <div className="flex items-center gap-2">
                     <FileText className="h-5 w-5 text-blue-500" />
                     <span className="font-medium">{file.name}</span>
+                    <span className="text-xs text-muted-foreground ml-2">
+                      ({datasetType === 'biased' ? 'Biased Dataset' : 'Unbiased Dataset'})
+                    </span>
                   </div>
                   <Button variant="ghost" size="sm" onClick={() => setFile(null)}>
                     Remove
@@ -221,6 +282,37 @@ export function UploadSimulation() {
 49,56457.12,1,11701.35,1,High School,0,0
 40,61544.88,0,27018.61,0,High School,0,0`}
                 </pre>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    const biasedFile = new File(['sample'], 'biased_loan_dataset.csv', { type: 'text/csv' })
+                    setFile(biasedFile)
+                    setDatasetType('biased')
+                  }}
+                  className="h-auto p-4 flex flex-col items-start"
+                >
+                  <div className="font-medium mb-1">Use Biased Dataset</div>
+                  <div className="text-xs text-muted-foreground text-left">
+                    Sample dataset with significant gender bias (-26.1% gap)
+                  </div>
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    const unbiasedFile = new File(['sample'], 'unbiased_loan_data.csv', { type: 'text/csv' })
+                    setFile(unbiasedFile)
+                    setDatasetType('unbiased')
+                  }}
+                  className="h-auto p-4 flex flex-col items-start"
+                >
+                  <div className="font-medium mb-1">Use Unbiased Dataset</div>
+                  <div className="text-xs text-muted-foreground text-left">
+                    Sample dataset with minimal overall bias (+1.3% gap)
+                  </div>
+                </Button>
               </div>
             </div>
           ) : (
@@ -300,12 +392,9 @@ export function UploadSimulation() {
         <CardFooter className="flex justify-between">
           {!isUploading ? (
             <>
-              <Button variant="ghost" onClick={() => {
-                // Simulate using sample data
-                setFile(new File(['sample'], 'sample_hiring_data.csv', { type: 'text/csv' }))
-              }}>
-                Use Sample Data
-              </Button>
+              <div className="text-xs text-muted-foreground">
+                {file && `Dataset: ${datasetType === 'biased' ? 'Biased' : 'Unbiased'} loan data`}
+              </div>
               <Button onClick={handleUpload} disabled={!file}>
                 Start Audit
               </Button>
@@ -315,14 +404,25 @@ export function UploadSimulation() {
               <Button variant="ghost" disabled={!isComplete} onClick={resetSimulation}>
                 Reset
               </Button>
-              <Button 
-                disabled={!isComplete} 
-                onClick={() => setShowReport(true)}
-                className="gap-2"
-              >
-                <FileText className="h-4 w-4" />
-                View Full Report
-              </Button>
+              <div className="flex gap-2">
+                <Button 
+                  disabled={!isComplete} 
+                  onClick={() => setShowAnalysis(true)}
+                  className="gap-2"
+                >
+                  <BarChart2 className="h-4 w-4" />
+                  View DoWhy Analysis
+                </Button>
+                <Button 
+                  disabled={!isComplete} 
+                  onClick={() => setShowReport(true)}
+                  variant="outline"
+                  className="gap-2"
+                >
+                  <FileText className="h-4 w-4" />
+                  Compliance Report
+                </Button>
+              </div>
             </>
           )}
         </CardFooter>
